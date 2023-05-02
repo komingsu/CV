@@ -2,26 +2,26 @@
 
 Scale-Invariant Feature Transform
 
-![Untitled](md_img/SIFT/Untitled.png)
+![Untitled](../images/SIFT/Untitled.png)
 
 66000회가 넘는 인용수…
 
 ## Revisted : Feature Points
 
-![Untitled](md_img/SIFT/Untitled%201.png)
+![Untitled](../images/SIFT/Untitled%201.png)
 
 주변 all neighboring points 에서 가장 다른 부분을 찾음
 
 ## SIFT - Keypoint detector & descriptor
 
-![Untitled](md_img/SIFT/Untitled%202.png)
+![Untitled](../images/SIFT/Untitled%202.png)
 
 1. Detector는 Blob detection 이나 harris corner와 같이 scale-space 에서 값이 아주 높은 값을 찾습니다.
 2. NMS 와 같은 방법으로 Threadholding 을 통해 filtering 을 해줍니다.
 3. 4X4 Gird 에 Orientation 을 가진 히스토그램으로 만듭니다.
 4. Dominant Orientation 의 방향으로 정규화 한후 descriptor를 계산
 
-![Untitled](md_img/SIFT/Untitled%203.png)
+![Untitled](../images/SIFT/Untitled%203.png)
 
 ## SIFT 의 장점
 
@@ -32,13 +32,13 @@ Scale-Invariant Feature Transform
 
 ## SIFT 1. Find Scale-Space Extrema
 
-![Untitled](md_img/SIFT/Untitled%204.png)
+![Untitled](../images/SIFT/Untitled%204.png)
 
 기존의 방법은 LoG(Laplacian of Gaussian)을 통해 Blob을 찾았습니다.
 
 하지만 SIFT에서는 DoG(Difference of Gaussian) 을 사용합니다.
 
-![Untitled](md_img/SIFT/Untitled%205.png)
+![Untitled](../images/SIFT/Untitled%205.png)
 
 왼쪽, 초록 가우시안 그래프에서 빨간색 가우시안 그래프를 빼게되면 파란색 그래프가 나오게 됩니다.
 
@@ -48,19 +48,19 @@ Scale-Invariant Feature Transform
 
 이 내부의 계산과정을 보면
 
-![Untitled](md_img/SIFT/Untitled%206.png)
+![Untitled](../images/SIFT/Untitled%206.png)
 
 이때 위의 $\frac{x^2+y^2-2\sigma^2}{\sigma^3}$의 값이 LoG의 값과 비슷한 것을 볼 수 있습니다.
 
-![Untitled](md_img/SIFT/Untitled%207.png)
+![Untitled](../images/SIFT/Untitled%207.png)
 
 즉 DoG가 Scale-normalized LoG를 거의 근사한다고 볼 수 있습니다.
 
-![Untitled](md_img/SIFT/Untitled%208.png)
+![image-20230430000414038](../images/SIFT/image-20230430000414038.png)
 
 Gussian-blur를 pyramid scale로 적용을 한 이미지에서 level별 차이를 추출합니다(DoG)
 
-![Untitled](md_img/SIFT/Untitled%209.png)
+![Untitled](../images/SIFT/Untitled%209.png)
 
 그리고 DoG의 3x3x3 을 확인하여 가장 extrema로 keypoint를 찾습니다.
 
@@ -72,11 +72,11 @@ Gussian-blur를 pyramid scale로 적용을 한 이미지에서 level별 차이�
 
 Hassian matrix에서 keypoint 에 대한 위치와 scale의 의 고유값을 찾습니다.
 
-![Untitled](md_img/SIFT/Untitled%2010.png)
+![Untitled](../images/SIFT/Untitled%2010.png)
 
 그리고 고윳값 분해(eigende composition)와 $\lambda_1$을 $\lambda_2$의 scale($\gamma$) 한 값이라고 보고 계산을 합니다.
 
-![Untitled](md_img/SIFT/Untitled%2011.png)
+![Untitled](../images/SIFT/Untitled%2011.png)
 
 이때 $\frac{(\gamma+1)^2}{\gamma}$ 의 값이 Threadhold 를 넘는값만 표현을 해줍니다.
 
@@ -84,11 +84,11 @@ Hassian matrix에서 keypoint 에 대한 위치와 scale의 의 고유값을 찾
 
 이때 Keypoint 주변 gradient의 magnitude(크기)와 orientation(방향) 을  계산해줍니다.
 
-![Untitled](md_img/SIFT/Untitled%2012.png)
+![Untitled](../images/SIFT/Untitled%2012.png)
 
 이렇게 계산된
 
-![Untitled](md_img/SIFT/Untitled%2013.png)
+![image-20230430000759663](../images/SIFT/image-20230430000759663.png)
 
 grad의 벡터(크기와 방향)들을 통합하여 방향성의 값을 histogram으로 voting 합니다.
 
@@ -102,15 +102,15 @@ Angle histogram 에서  Dominatnt orientation 를 기준으로 회전합니다.
 
 그런뒤 각각의 histogram에 각 방향성 값을 펼쳐서 기입합니다. 
 
-![Untitled](md_img/SIFT/Untitled%2014.png)
+![Untitled](../images/SIFT/Untitled%2014.png)
 
 위 과정을 정리하면
 
-![Untitled](md_img/SIFT/Untitled%2015.png)
+![Untitled](../images/SIFT/Untitled%2015.png)
 
 많은 Key point를 찾고 Filtering 으로 거른다음 keypoint 주변의 patch들에서 pixel들을 보고 Orientation map을 보게 됩니다.
 
-![Untitled](md_img/SIFT/Untitled%2016.png)
+![Untitled](../images/SIFT/Untitled%2016.png)
 
 각 값들을 voting을 통해 angle histogram을 생성한다음  Dominant orientation기준으로 회전, Unit length기준으로 크기 정규화를 해줍니다.
 
@@ -130,8 +130,8 @@ Angle histogram 에서  Dominatnt orientation 를 기준으로 회전합니다.
 
 - rotation, scale change
 
-![Untitled](md_img/SIFT/Untitled%2017.png)
+![Untitled](../images/SIFT/Untitled%2017.png)
 
 - illumination, scale  change
 
-![Untitled](md_img/SIFT/Untitled%2018.png)
+![Untitled](../images/SIFT/Untitled%2018.png)
