@@ -1,4 +1,4 @@
-# ../images/edge_and_corner
+# edge_and_corner
 
 ![Untitled](../images/edge_and_corner/Untitled.png)
 
